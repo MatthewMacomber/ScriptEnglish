@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScriptEndlish To-Do List</title>
+    <style>
+        /* Basic Styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 50px;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        /* Container and Card Styles */
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            box-sizing: border-box;
+        }
+        .header {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Element Styles */
+        .title {
+            margin: 0;
+            color: #1a202c;
+        }
+        .subtitle {
+            margin: 5px 0 0;
+            color: #718096;
+            font-weight: normal;
+        }
+        .input {
+            flex-grow: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .input:focus {
+            outline: none;
+            border-color: #4a90e2;
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+        }
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+        .btn:active {
+            transform: scale(0.98);
+        }
+        .btn-primary {
+            background-color: #4a90e2;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #357abd;
+        }
+        .btn-secondary {
+             background-color: #6c757d;
+             color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        .task-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+        .task-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: #fdfdff;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .task-item-text {
+            flex-grow: 1;
+        }
+        .btn-complete {
+            background-color: #28a745;
+            color: white;
+            margin-left: 10px;
+            padding: 8px 12px;
+            font-size: 14px;
+        }
+        .btn-complete:hover {
+            background-color: #218838;
+        }
+
+        /* Animation Keyframes and Classes */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; transform: scale(1); }
+            to { opacity: 0; transform: scale(0.95); }
+        }
+        @keyframes taskComplete {
+            from { text-decoration-color: transparent; }
+            to { text-decoration-color: #718096; }
+        }
+
+        .fade-in-anim {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        .fade-out-anim {
+            animation: fadeOut 0.5s ease forwards;
+        }
+        .task-complete-anim .task-item-text {
+            text-decoration: line-through;
+            color: #718096;
+            animation: taskComplete 0.5s ease forwards;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Your content will be created here -->
+
+    <script src="scriptenglish.js"></script>
+
+    <script>
+        // --- SCRIPTENGLISH COMMANDS TO BUILD THE APP ---
+
+        // Wrap all logic in a DOMContentLoaded listener to ensure the body exists before execution.
+        document.addEventListener('DOMContentLoaded', () => {
+            // Wrap all commands in an async function to ensure UI is built before we attach listeners
+            (async () => {
+
+                // 1. Build the main UI structure and WAIT for it to finish
+                await ScriptEnglish.cmd(`
+                    create div named appContainer in body ..
+                    addClass container to appContainer ..
+                    create div named appHeader in appContainer ..
+                    addClass header to appHeader ..
+                    create h1 named mainTitle in appHeader with text "ScriptEnglish To-Do" ..
+                    addClass title to mainTitle ..
+                    create h3 named subTitle in appHeader with text "A demo of ScriptEnglish" ..
+                    addClass subtitle to subTitle ..
+                    create form named taskForm in appContainer ..
+                    create div named formGroup in taskForm ..
+                    addClass form-group to formGroup ..
+                    create input named taskInput in formGroup ..
+                    addClass input to taskInput ..
+                    setAttr placeholder to "Enter a new task..." on taskInput ..
+                    create button named addButton in formGroup with text "Add" ..
+                    addClass btn to addButton ..
+                    addClass btn-primary to addButton ..
+                    create ul named taskList in appContainer ..
+                    addClass task-list to taskList
+                `);
+
+                // 2. Add a button to fetch a random task from an API (and wait for it)
+                await ScriptEnglish.cmd(`
+                    create button named fetchButton in appHeader ..
+                    addClass btn to fetchButton ..
+                    addClass btn-secondary to fetchButton ..
+                    style fetchButton with margin-top:15px ..
+                    insert text "Get Random Task" into fetchButton ..
+                    when fetchButton is click do
+                        fetch json from https://jsonplaceholder.typicode.com/todos/1 ..
+                        animate fetchButton with fade-in-anim ..
+                        insert value "Buy milk" on taskInput
+                    end
+                `);
+
+                // 3. Define and bind the logic for adding a new task using the 'when' command.
+                await ScriptEnglish.cmd(`
+                    when taskForm is submit do
+                        create li named task-item-UNIQUE_ID in taskList
+                        .. addClass task-item to task-item-UNIQUE_ID
+                        .. animate task-item-UNIQUE_ID with fade-in-anim
+                        .. create span named task-text-UNIQUE_ID in task-item-UNIQUE_ID
+                        .. addClass task-item-text to task-text-UNIQUE_ID
+                        .. insert text INPUT_VALUE into task-text-UNIQUE_ID
+                        .. create button named complete-btn-UNIQUE_ID in task-item-UNIQUE_ID with text "Complete"
+                        .. addClass btn to complete-btn-UNIQUE_ID
+                        .. addClass btn-complete to complete-btn-UNIQUE_ID
+                        .. when complete-btn-UNIQUE_ID is click do
+                            animate task-item-UNIQUE_ID with task-complete-anim for 0.5s and keep
+                            .. wait 1s
+                            .. animate task-item-UNIQUE_ID with fade-out-anim for 0.5s
+                            .. wait 0.5s
+                            .. remove element task-item-UNIQUE_ID
+                        end
+                        .. insert value "" on taskInput
+                    end
+                `);
+            })();
+        });
+    </script>
+
+</body>
+</html>
